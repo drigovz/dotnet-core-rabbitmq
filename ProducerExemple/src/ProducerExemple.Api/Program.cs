@@ -1,3 +1,5 @@
+using FluentValidation.AspNetCore;
+using ProducerExemple.Application.Notifications;
 using ProducerExemple.Infra.IoC.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddRepositories(builder.Configuration);
+builder.Services.AddScoped<NotificationContext>();
+builder.Services.AddControllers()
+       .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NotificationContext>());
+
 
 var app = builder.Build();
 
