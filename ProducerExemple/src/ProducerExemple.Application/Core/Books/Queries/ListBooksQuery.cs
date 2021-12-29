@@ -2,6 +2,6 @@
 
 namespace ProducerExemple.Application.Core.Books.Queries
 {
-    public class GetBooksQuery : IRequest<BaseResponse>
+    public class ListBooksQuery : IRequest<BaseResponse>
     { }
 }

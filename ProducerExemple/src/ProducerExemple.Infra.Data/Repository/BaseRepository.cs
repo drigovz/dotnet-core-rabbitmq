@@ -26,7 +26,7 @@ namespace ProducerExemple.Infra.Data.Repository
         public async Task<IEnumerable<E>> GetAsync() =>
             await _context.Set<E>().ToListAsync();
 
-        public async Task<E> GetByIdAsync(int id)
+        public async Task<E?> GetByIdAsync(int id)
         {
             try
             {
@@ -36,13 +36,13 @@ namespace ProducerExemple.Infra.Data.Repository
                 else
                     return null;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex.InnerException;
+                return null;
             }
         }
 
-        public async Task<E> AddAsync(E entity)
+        public async Task<E?> AddAsync(E entity)
         {
             try
             {
@@ -50,32 +50,33 @@ namespace ProducerExemple.Infra.Data.Repository
 
                 _context.Set<E>().Add(entity);
             }
-            catch (Exception ex)
+            catch
             {
                 await Rollback();
-                throw ex.InnerException;
+                return null;
             }
 
             await Commit();
             return entity;
         }
 
-        public async Task<E> UpdateAsync(E entity)
+        public async Task<E?> UpdateAsync(E entity)
         {
             try
             {
                 var result = await GetByIdAsync(entity.Id);
-                if (result == null) return null;
+                if (result == null) 
+                    return null;
 
                 entity.UpdatedAt = DateTime.UtcNow;
                 entity.CreatedAt = result.CreatedAt;
 
                 _context.Entry(result).CurrentValues.SetValues(entity);
             }
-            catch (Exception ex)
+            catch
             {
                 await Rollback();
-                throw ex.InnerException;
+                return null;
             }
 
             await Commit();
@@ -87,14 +88,15 @@ namespace ProducerExemple.Infra.Data.Repository
             try
             {
                 var result = await GetByIdAsync(id);
-                if (result == null) return false;
+                if (result == null) 
+                    return false;
 
                 _context.Set<E>().Remove(result);
             }
-            catch (Exception ex)
+            catch
             {
                 await Rollback();
-                throw ex.InnerException;
+                return false;
             }
 
             await Commit();

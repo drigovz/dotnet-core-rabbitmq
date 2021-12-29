@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ProducerExemple.Application\ProducerExemple.Application.csproj" />
     <ProjectReference Include="..\ProducerExemple.Domain\ProducerExemple.Domain.csproj" />
     <ProjectReference Include="..\ProducerExemple.Infra.Data\ProducerExemple.Infra.Data.csproj" />
